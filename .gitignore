@@ -1,0 +1,47 @@
+# Node.js and React project
+node_modules
+build
+dist
+.next
+out
+package-lock.json
+yarn.lock
+npm-debug.log*
+yarn-error.log*
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Python project
+__pycache__/
+*.pyc
+*.pyd
+.python-version
+env/
+venv/
+ENV/
+.venv/
+Lib/
+Scripts/
+*.egg-info/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+build/
+dist/
+wheels/
+*.whl
+*.tar.gz
+MANIFEST.in
+
+# Common files and directories
+.DS_Store
+Thumbs.db
+*.log
+*.swp
+*.swo
+.vscode/
+.idea/
