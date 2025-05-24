@@ -8,6 +8,7 @@ class Platillos(db.Model):
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: uuid4().hex)
     nombre: Mapped[str] = mapped_column(String(255), unique=True, nullable=False) 
     descripcion: Mapped[str] = mapped_column(String(1000), nullable=True)
+    precio_mano_obra: Mapped[float]
 
     eventos_que_lo_han_usado = relationship("Reservaciones", back_populates="platillo")
     instrucciones = relationship( "Instrucciones", back_populates="platillo")
