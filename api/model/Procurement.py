@@ -7,7 +7,7 @@ import datetime
 class Procurement(db.Model):
     __tablename__ = 'procurement' 
     
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: uuid4().hex)
+    id: Mapped[str] = mapped_column("id", String(36), primary_key=True, default=lambda: uuid4().hex)
 
     ingrediente_id: Mapped[str] = mapped_column(ForeignKey("ingredientes.id"), nullable=False)
     cantidad: Mapped[float] = mapped_column(Float, nullable=False)

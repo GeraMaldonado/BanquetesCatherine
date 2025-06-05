@@ -6,7 +6,7 @@ import datetime
 
 class Pagos(db.Model):
     __tablename__ = 'pagos' 
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: uuid4().hex)
+    id: Mapped[str] = mapped_column("id", String(36), primary_key=True, default=lambda: uuid4().hex)
     
     reservacion_id: Mapped[str] = mapped_column(ForeignKey("reservaciones.id"), nullable=False)
     monto: Mapped[float] = mapped_column(Float, nullable=False)

@@ -5,7 +5,7 @@ from uuid import uuid4
 
 class Platillos(db.Model):
     __tablename__ = 'platillos' 
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: uuid4().hex)
+    id: Mapped[str] = mapped_column("id", String(36), primary_key=True, default=lambda: uuid4().hex)
     nombre: Mapped[str] = mapped_column(String(255), unique=True, nullable=False) 
     descripcion: Mapped[str] = mapped_column(String(1000), nullable=True)
     precio_mano_obra: Mapped[float]
@@ -17,7 +17,7 @@ class Platillos(db.Model):
 
 class Instrucciones(db.Model):
     __tablename__ = 'instrucciones' 
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: uuid4().hex)
+    id: Mapped[str] = mapped_column("id", String(36), primary_key=True, default=lambda: uuid4().hex)
     
     platillo_id: Mapped[str] = mapped_column(ForeignKey("platillos.id"), nullable=False)
     index: Mapped[int] = mapped_column(Integer, nullable=False) 

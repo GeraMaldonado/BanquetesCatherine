@@ -7,11 +7,11 @@ from db import db
 class Reservaciones(db.Model):
     __tablename__ = "reservaciones"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column("id", primary_key=True)
     salon_id: Mapped[int] = mapped_column(ForeignKey("salones.id"))
     platillo_id: Mapped[int] = mapped_column(ForeignKey("platillos.id"), nullable=False)
     cliente_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    fecha: Mapped[str]
+    fecha: Mapped[str] = mapped_column(String(100), nullable=False)
     invitados: Mapped[int]
     confirmado: Mapped[bool]
 

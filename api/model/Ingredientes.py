@@ -6,7 +6,7 @@ from typing import List
 
 class Ingredientes(db.Model):
     __tablename__ = 'ingredientes' 
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: uuid4().hex)
+    id: Mapped[str] = mapped_column("id", String(36), primary_key=True, default=lambda: uuid4().hex)
     nombre: Mapped[str] = mapped_column(String(255), unique=True, nullable=False) 
     precio: Mapped[float] = mapped_column(Float, nullable=False)
     unidad: Mapped[str] = mapped_column(String(50), nullable=False) 

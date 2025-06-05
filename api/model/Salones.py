@@ -5,7 +5,7 @@ from uuid import uuid4
 
 class Salones(db.Model):
     __tablename__ = 'salones' 
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: uuid4().hex)
+    id: Mapped[str] = mapped_column("id", String(36), primary_key=True, default=lambda: uuid4().hex)
     
     gerente_id: Mapped[str] = mapped_column(ForeignKey("users.id"), nullable=False)
     name: Mapped[str] = mapped_column(String(255), unique=True, nullable=False) 

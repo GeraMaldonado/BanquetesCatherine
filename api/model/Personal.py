@@ -5,7 +5,7 @@ from uuid import uuid4
 
 class Personal(db.Model):
     __tablename__ = 'personal' 
-    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: uuid4().hex)
+    id: Mapped[str] = mapped_column("id", String(36), primary_key=True, default=lambda: uuid4().hex)
     nombre: Mapped[str] = mapped_column(String(255), nullable=False)
 
     # agendas: Mapped[list["Reservaciones_Personal"]] = relationship(back_populates="personal_requerido")
