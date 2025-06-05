@@ -3,6 +3,8 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from db import db
 from uuid import uuid4
 
+ROLES = ["GERENTE", "CLIENTE", "PERSONAL", "ADMIN"]
+
 class Users(db.Model): 
     __tablename__ = 'users'
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: uuid4().hex)

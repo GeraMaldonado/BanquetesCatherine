@@ -10,7 +10,7 @@ def login():
 
 
 @authentication.post("/logout")
-def login():
+def logout():
     pass
 
 

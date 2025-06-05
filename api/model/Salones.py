@@ -11,6 +11,8 @@ class Salones(db.Model):
     name: Mapped[str] = mapped_column(String(255), unique=True, nullable=False) 
     costoRenta: Mapped[float] = mapped_column(Float, nullable=False)
     capacidadMaxima: Mapped[int] = mapped_column(Integer, nullable=False)
+    thumbnail: Mapped[str] = mapped_column(String(500))
+
 
     eventos = relationship("Reservaciones", back_populates="salon")
     gerente = relationship("Users", back_populates="salon_gerencia")

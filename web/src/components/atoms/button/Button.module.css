@@ -1,0 +1,4 @@
+.appBtn:hover {
+    filter: brightness(1.2);
+    background-color: gray !important;
+}

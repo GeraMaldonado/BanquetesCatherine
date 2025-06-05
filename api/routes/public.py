@@ -1,4 +1,6 @@
 from flask import Blueprint
+from model.Platillos import Platillos, Instrucciones, InstruccionesIngredientes
+
 
 
 public_routes = Blueprint("public", __name__, url_prefix="/public")
@@ -6,7 +8,13 @@ public_routes = Blueprint("public", __name__, url_prefix="/public")
 
 @public_routes.get("/platillos")
 def get_platillos_public():
-    pass
+    
+    platillos = Platillos.query.all()
+
+    return [platillo.to_json() for platillo in platillos], 200
+
+
+
 
 @public_routes.get("/platillos/<int:platillo_id>")
 def get_platillo_by_id_public(platillo_id):

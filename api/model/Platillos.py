@@ -9,6 +9,7 @@ class Platillos(db.Model):
     nombre: Mapped[str] = mapped_column(String(255), unique=True, nullable=False) 
     descripcion: Mapped[str] = mapped_column(String(1000), nullable=True)
     precio_mano_obra: Mapped[float]
+    thumbnail: Mapped[str]
 
     eventos_que_lo_han_usado = relationship("Reservaciones", back_populates="platillo")
     instrucciones = relationship( "Instrucciones", back_populates="platillo")
