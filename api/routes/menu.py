@@ -69,7 +69,12 @@ def manager_delete_platillo(platillo_id):
 
 @menu.get("/ingredientes")
 def manager_list_ingredientes():
-    pass
+    
+    ingredientes = Ingredientes.query.all()
+
+    return [ingrediente.to_json() for ingrediente in ingredientes], 200
+
+
 
 @menu.post("/ingredientes")
 def manager_add_ingrediente():

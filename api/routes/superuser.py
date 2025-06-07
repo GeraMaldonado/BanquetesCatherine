@@ -1,6 +1,6 @@
 from flask import Blueprint, request
 from db import add, find_by_id, delete
-from model.Users import Users
+from model.Users import Users, ROLES
 from model.Salones import Salones
 
 
@@ -26,6 +26,10 @@ def admin_update_gerente_status(gerente_id):
 def create_user():
     
     payload = request.get_json()
+
+    if payload.get("role") not in ROLES:
+        return {"message": "Invalid role"}, 400
+
 
     user = Users(**payload)
 

@@ -1,28 +1,27 @@
-from flask import Blueprint
+from flask import Blueprint, request
+from model.Users import Users
+from db import add
 
 
 hr = Blueprint("hr", __name__, url_prefix="/hr")
 
 @hr.get("/personal")
 def list_personal_general():
-    pass
+    
+    personal = Users.query.where(Users.role == "PERSONAL").all()
+
+    return [personal.to_json() for personal in personal], 200
+
 
 @hr.post("/personal")
 def add_personal_general():
-    pass
+    
+    payload = request.get_json()
 
-@hr.get("/horarios")
-def view_horarios():
-    pass
+    user = Users(**payload, role="PERSONAL", password="-", email = "-")
 
-@hr.post("/horarios")
-def create_horario():
-    pass
+    add(user)
 
-@hr.put("/horarios/<int:horario_id>")
-def update_horario(horario_id):
-    pass
+    return user.to_json(), 200
 
-@hr.delete("/horarios/<int:horario_id>")
-def delete_horario(horario_id):
-    pass
+

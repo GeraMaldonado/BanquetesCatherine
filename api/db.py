@@ -7,6 +7,11 @@ class Base(DeclarativeBase):
   def to_json(self):
 
     return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+  
+  def update(self, **kwargs):
+
+    for key, value in kwargs.items():
+      setattr(self, key, value)
 
 
 

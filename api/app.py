@@ -18,6 +18,7 @@ from routes.superuser import superuser_routes
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
+app.secret_key = "banquetitos"
 
 db.init_app(app)
 
