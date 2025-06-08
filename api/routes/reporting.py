@@ -1,4 +1,6 @@
-from flask import Blueprint
+from flask import Blueprint, request
+from model.Procurement import Procurement
+
 
 
 reporting = Blueprint("reporting", __name__, url_prefix="/reports")
@@ -6,6 +8,7 @@ reporting = Blueprint("reporting", __name__, url_prefix="/reports")
 @reporting.get("/ingredientes-necesarios")
 def report_ingredientes_necesarios():
     pass
+
 
 @reporting.get("/eventos-pendientes-pago")
 def report_eventos_pendientes_pago():

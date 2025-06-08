@@ -1,8 +1,10 @@
 from sqlalchemy import Column, Integer, String, Float, Boolean, ForeignKey
 from sqlalchemy.orm import relationship, Mapped,mapped_column
 from sqlalchemy.ext.declarative import declarative_base
-from db import db
+from db import db, delete, add
 from uuid import uuid4
+from model.Personal import Reservaciones_Personal
+
 
 
 class Reservaciones(db.Model):
@@ -31,7 +33,8 @@ class Reservaciones(db.Model):
             "platillo": self.platillo.to_json(),
             "user": self.user.to_json(),
             "importe": self.obtener_costo(),
-            "plantilla": [personal.to_json() for personal in self.plantilla]
+            "plantilla": [personal.personal_requerido.to_json() for personal in self.plantilla],
+            "pagos":  [pago.to_json() for pago in self.pagos]
         }
 
     
@@ -41,3 +44,19 @@ class Reservaciones(db.Model):
         costo_platillo = self.platillo.precio_mano_obra * self.invitados
 
         return costo_salon + costo_platillo
+
+
+    def actualizar_plantilla(self, nueva_plantilla):
+
+        plantilla_actual = self.plantilla
+        actual_ids = [p.colaborador_id for p in plantilla_actual]
+
+        a_eliminar = [p for p in plantilla_actual if p.colaborador_id not in nueva_plantilla]
+        a_agregar = [p for p in nueva_plantilla if p not in actual_ids]
+
+        for e in a_eliminar:
+            delete(e)
+
+        for a in a_agregar:
+            nuevo_personal = Reservaciones_Personal(reservacion_id = self.id, colaborador_id = a)
+            add(nuevo_personal)

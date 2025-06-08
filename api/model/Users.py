@@ -3,7 +3,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from db import db
 from uuid import uuid4
 
-ROLES = ["GERENTE", "CLIENTE", "PERSONAL", "ADMIN"]
+ROLES = ["GERENTE", "CLIENTE", "ADMIN"]
 
 class Users(db.Model): 
     __tablename__ = 'users'

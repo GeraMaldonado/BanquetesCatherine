@@ -8,7 +8,8 @@ class Personal(db.Model):
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=lambda: uuid4().hex)
     nombre: Mapped[str] = mapped_column(String(255), nullable=False)
 
-    # agendas: Mapped[list["Reservaciones_Personal"]] = relationship(back_populates="personal_requerido")
+    agendas = relationship("Reservaciones_Personal", back_populates="personal_requerido")
+    
 
 
 
@@ -19,5 +20,5 @@ class Reservaciones_Personal(db.Model):
     colaborador_id: Mapped[str] = mapped_column(ForeignKey("personal.id"), primary_key=True)
 
 
-    # personal_requerido = relationship("Personal", back_populates="agendas")
+    personal_requerido = relationship("Personal", back_populates="agendas")
     evento = relationship("Reservaciones", back_populates="plantilla")
