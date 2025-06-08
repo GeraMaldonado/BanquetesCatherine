@@ -1,4 +1,5 @@
-from flask import Blueprint
+from flask import Blueprint, request, session
+from model.Users import Users
 
 
 authentication = Blueprint("authentication", __name__, url_prefix="/auth")
@@ -6,11 +7,34 @@ authentication = Blueprint("authentication", __name__, url_prefix="/auth")
 
 @authentication.post("/login")
 def login():
-    pass
+    
+    try:
+
+        result = Users.login(**request.get_json())
+
+        if result.role == "PERSONAL":
+
+            raise Exception("Usuario no autorizado")
+
+        response = result.to_json()
+
+        session["user"] = response
+
+        return response, 200
+
+    except Exception as e:
+
+        return {"error": str(e)}, 400
+
+
 
 
 @authentication.post("/logout")
 def logout():
-    pass
+    
+    session.pop("user")
+
+    return {"message": "Logged out successfully"}, 200
+
 
 

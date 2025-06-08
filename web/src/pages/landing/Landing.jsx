@@ -1,0 +1,295 @@
+import { useState, useEffect, useRef } from "react";
+import { Button } from "../../components/atoms/button/Button"
+import { Image } from "../../components/atoms/image/Image"
+import { fetchSalones, fetchMenus } from "../../services/public.service";
+import { createCliente } from "../../services/clientes.service"; // Importar servicio de cliente
+import { createEvent } from "../../services/eventos.service"; // Importar servicio de evento
+
+
+export const Landing = ({ }) => {
+    const [salonesData, setSalonesData] = useState([]);
+    const [menuData, setMenuData] = useState([]);
+
+    const [selectedSalonId, setSelectedSalonId] = useState('');
+    const [selectedMenuId, setSelectedMenuId] = useState('');
+    const [guestCount, setGuestCount] = useState(10);
+    const [eventDate, setEventDate] = useState('');
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [isSubmitting, setIsSubmitting] = useState(false); // Para el estado de carga del botón del modal
+
+    const [formData, setFormData] = useState({});
+
+    const cotizadorRef = useRef(null);
+
+    function handleRsvFormChange(e) {
+        const value = e.target.value;
+        const name = e.target.name;
+
+        const [key, subkey, domicilioSubKey] = name.split('.');
+
+
+        setFormData(last => {
+
+            if (domicilioSubKey) {
+                return {
+                    ...last,
+                    [key]: {
+                        ...(last[key] || {}),
+                        [subkey]: {
+                            ...(last[key]?.[subkey] || {}),
+                            [domicilioSubKey]: value
+                        }
+                    }
+                }
+            }
+
+
+            return {
+                ...last,
+                [key]: {
+                    ...(last[key] || {}),
+                    [subkey]: value
+                }
+            }
+        });
+
+    }
+
+    const handleConfirmApartado = async () => {
+
+        setIsSubmitting(true);
+        try {
+            // 1. Crear el cliente
+            const clienteData = formData.usuario;
+            const nuevoCliente = await createCliente(clienteData);
+
+            if (!nuevoCliente || !nuevoCliente._id) {
+                alert("Hubo un error al registrar al cliente. Intenta de nuevo.");
+                setIsSubmitting(false);
+                return;
+            }
+
+            // 2. Crear el evento con el ID del cliente
+            const eventoData = formData.evento;
+            const nuevoEvento = await createEvent(eventoData);
+
+            if (nuevoEvento && nuevoEvento._id) {
+                alert(`¡Apartado solicitado con éxito!`);
+                handleCloseModal();
+            } else {
+                alert("Hubo un error al solicitar el apartado del evento. Intenta de nuevo.");
+            }
+        } catch (error) {
+            console.error("Error en el proceso de apartado:", error);
+            alert("Ocurrió un error inesperado. Por favor, intenta más tarde.");
+        } finally {
+            setIsSubmitting(false);
+            setFormData({});
+        }
+    };
+
+
+
+    useEffect(() => {
+        const loadInitialData = async () => {
+            try {
+                const salones = fetchSalones();
+                setSalonesData(salones);
+                if (salones.length > 0) setSelectedSalonId(salones[0]._id);
+
+                const menus = fetchMenus();
+                setMenuData(menus);
+                if (menus.length > 0) setSelectedMenuId(menus[0]._id);
+            } catch (error) {
+                console.error("Error loading initial data:", error);
+            }
+        };
+        loadInitialData();
+    }, []);
+
+    const handleScrollToCotizador = () => {
+        cotizadorRef.current?.scrollIntoView({ behavior: 'smooth' });
+    };
+
+
+    const handleOpenModal = () => setIsModalOpen(true);
+    const handleCloseModal = () => setIsModalOpen(false);
+
+    return (
+        <>
+            <div className="container">
+                <div className="row py-3 gy-5">
+                    {/* Header */}
+                    <div className="col-12 d-flex justify-content-between align-items-center position-sticky bg-white py-2" style={{ top: "0", left: 0, zIndex: 1020 }}> {/* Aumentado z-index y fondo para visibilidad */}
+                        <span className="fs-4 fw-bold d-flex align-items-center">
+                            <Image src="LOGO.svg" style={{ height: "35px" }} className="me-3" />
+                            Catherine Co.
+                        </span>
+                        <Button navigateTo="login" primary>Login</Button>
+
+                    </div>
+                    <div className="col-12 position-relative">
+                        <Image src="boda.jpg" className="w-100 rounded rounded-4" style={{ height: "80vh", objectFit: "cover", objectPosition: "center", filter: "brightness(70%)" }} />
+                        <div className="w-100 h-100 position-absolute top-0 start-0 d-flex align-items-center flex-column text-white justify-content-center">
+                            <h1>Tu Evento Soñado Comienza Aquí</h1>
+                            <h6>Crea memorias inolvidables con nuestro excepcional servicio de catering. Comienza cotizando tu evento.</h6>
+                            <Button secondary className="px-5 mt-4" onClick={handleScrollToCotizador}>Ir a cotizar</Button>
+                        </div>
+                    </div>
+                    <div className="col-12 d-flex flex-column align-items-center">
+                        <div className="col-12 fs-4 fw-bold mb-4">Salones con convenio</div>
+                        <div className="col-12 d-flex overflow-x-auto py-3">
+                            {
+                                salonesData.map(salon => (
+                                    <div key={salon._id} className="col-12 col-md-4 col-lg-3 me-4 d-flex flex-column flex-shrink-0" style={{ width: "280px" }}>
+                                        <Image src={salon.thumbnail} className="rounded" style={{ height: "180px", objectFit: "cover" }} />
+                                        <b className="mt-2">{salon.nombre}</b>
+                                        <p className="text-muted small">{salon.descripcion}</p>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    <div className="col-12 d-flex flex-column align-items-center">
+                        <div className="col-12 fs-4 fw-bold mb-4">Menú disponible</div>
+                        <div className="col-12 d-flex overflow-x-auto py-3">
+                            {
+                                menuData.map(platillo => (
+                                    <div key={platillo._id} className="col-12 col-md-4 col-lg-3 me-4 d-flex flex-column flex-shrink-0" style={{ width: "280px" }}>
+                                        <Image src={platillo.thumbnail} className="rounded" style={{ height: "180px", objectFit: "cover" }} />
+                                        <b className="mt-2">{platillo.nombre}</b>
+                                        <p className="text-muted small">{platillo.descripcion}</p>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </div>
+                    <div className="col-12 d-flex flex-column align-items-center mb-5" id="cotizador" ref={cotizadorRef}>
+                        <div className="col-12 fs-4 fw-bold mb-4 text-center">¿Listo para planear tu evento?</div>
+                        <div className="col-12">
+                            <div className="row">
+                                <div className="col-2"></div>
+                                <div className="col-4 border-end px-4">
+                                    <label htmlFor="salonSelect" className="form-label">Escoge un salón de eventos</label>
+                                    <select id="salonSelect" className="form-select" value={formData.evento?.salon} name="evento.salon" onChange={handleRsvFormChange}>
+                                        {
+                                            salonesData.map(salon => (
+                                                <option key={salon._id} value={salon._id}>{salon.nombre}</option>
+                                            ))
+                                        }
+                                    </select>
+                                    <label className="mt-3 form-label" htmlFor="menuSelect">¿Qué menú darás a tus invitados?</label>
+                                    <select id="menuSelect" className="form-select" value={formData.evento?.menu} name="evento.menu" onChange={handleRsvFormChange}>
+                                        {
+                                            menuData.map(platillo => (
+                                                <option key={platillo._id} value={platillo._id}>{platillo.nombre} - ${platillo.precio.toFixed(2)} pp</option>
+                                            ))
+                                        }
+                                    </select>
+                                    <label className="mt-3 form-label" htmlFor="guestCountInput" >Cantidad de invitados</label>
+                                    <input id="guestCountInput" type="number" className="form-control" value={formData.evento?.invitados} name="evento.invitados" onChange={handleRsvFormChange} min="1" />
+                                    <label className="mt-3 form-label" htmlFor="eventDateInput">Fecha de tu evento</label>
+                                    <input id="eventDateInput" type="date" className="form-control" value={formData.evento?.fecha} name="evento.fecha" onChange={handleRsvFormChange} />
+                                </div>
+                                <div className="col-4 d-flex flex-column justify-content-center">
+                                    <h1>
+                                        ${((formData.evento?.invitados || 0) * (menuData.find(menu => menu._id === formData.evento?.menu)?.precio || 0)).toLocaleString()} MXN
+                                    </h1>                                    <label htmlFor="">Costo estimado de tu evento</label>
+                                    <p>Incluye:</p>
+                                    <ul>
+                                        <li>Platillos</li>
+                                        <li>Renta del salón</li>
+                                        <li>Servicio de meseros</li>
+                                    </ul>
+                                    <Button className="mt-2" accent onClick={handleOpenModal}>¡Solicitar apartado!</Button>
+                                </div>
+                                <div className="col-2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Modal de Bootstrap */}
+            {isModalOpen && (
+                <div className="modal fade show" tabIndex="-1" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }} aria-labelledby="apartadoModalLabel" aria-hidden={!isModalOpen}>
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title" id="apartadoModalLabel">Confirmar Solicitud de Apartado</h5>
+                                <Button type="button" className="btn-close" onClick={handleCloseModal} aria-label="Close"></Button>
+                            </div>
+                            <div className="modal-body">
+                                <p>Por favor, proporciona los siguientes detalles adicionales para tu evento:</p>
+                                <h6 className="mt-3 mb-2">Datos del Cliente</h6>
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="clientNameInput" className="form-label">Nombre(s)</label>
+                                        <input type="text" className="form-control" id="clientNameInput" name="usuario.nombre" value={formData.usuario?.nombre} onChange={handleRsvFormChange} required />
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="clientLastNameInput" className="form-label">Apellidos</label>
+                                        <input type="text" className="form-control" id="clientLastNameInput" name="usuario.apellido" value={formData.usuario?.apellido} onChange={handleRsvFormChange} required />
+                                    </div>
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="clientPhoneInput" className="form-label">Teléfono</label>
+                                        <input type="tel" className="form-control" id="clientPhoneInput" name="usuario.telefono" value={formData.usuario?.telefono} onChange={handleRsvFormChange} required />
+                                    </div>
+                                    <div className="col-md-6 mb-3">
+                                        <label htmlFor="clientRfcInput" className="form-label">RFC (Opcional)</label>
+                                        <input type="text" className="form-control" id="clientRfcInput" name="usuario.rfc" value={formData.usuario?.rfc} onChange={handleRsvFormChange} />
+                                    </div>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="clientEmailInput" className="form-label">Correo Electrónico (será tu usuario)</label>
+                                    <input type="email" className="form-control" id="clientEmailInput" name="usuario.usuario" value={formData.usuario?.usuario} onChange={handleRsvFormChange} required />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="clientPasswordInput" className="form-label">Contraseña</label>
+                                    <input type="password" className="form-control" id="clientPasswordInput" name="usuario.password" value={formData.usuario?.password} onChange={handleRsvFormChange} required />
+                                    <div id="passwordHelpBlock" className="form-text">
+                                        Tu contraseña debe tener al menos 8 caracteres.
+                                    </div>
+                                </div>
+                                <h6 className="mt-4 mb-2">Datos del Evento</h6>
+                                <div className="mb-3">
+                                    <label htmlFor="eventTypeSelect" className="form-label">Tipo de Evento</label>
+                                    <select id="eventTypeSelect" className="form-select" value={formData.evento?.tipo} name="evento.tipo" onChange={handleRsvFormChange}>
+                                        <option value="">Selecciona un tipo</option>
+                                        <option value="boda">Boda</option>
+                                        <option value="graduacion">Graduación</option>
+                                        <option value="cumpleanos">Cumpleaños</option>
+                                        <option value="corporativo">Evento Corporativo</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="eventDescriptionInput" className="form-label">Nombre/Descripción del Evento</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="eventDescriptionInput"
+                                        placeholder="Ej: Boda Erick y Juana, XV Años de Sofía"
+                                        name="evento.descripcion"
+                                        value={formData.evento?.descripcion}
+                                        onChange={handleRsvFormChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="modal-footer">
+                                <Button type="button" secondary onClick={handleCloseModal}>Cancelar</Button>
+                                <Button type="button" primary onClick={handleConfirmApartado} disabled={isSubmitting}>
+                                    {isSubmitting ? 'Procesando...' : 'Confirmar Apartado'}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
+    )
+}

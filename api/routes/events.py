@@ -1,38 +1,86 @@
-from flask import Blueprint
+from flask import Blueprint, request
+from model.Reservaciones import Reservaciones
+from db import commit, delete
+
+
 
 
 events = Blueprint("manager_events", __name__, url_prefix="/events")
 
-@events.get("/solicitudes-banquete")
-def manager_get_solicitudes():
-    pass
 
-@events.get("/solicitudes-banquete/<int:solicitud_id>")
-def manager_get_solicitud_detail(solicitud_id):
-    pass
-
-def manager_create_or_confirm_reservacion():
-    pass
 
 @events.get("/reservaciones")
 def manager_get_all_reservaciones():
-    pass
+    
+    args = request.args
 
-@events.get("/reservaciones/<int:reservacion_id>")
+    params = []
+
+    if args.get("user_id"): 
+        params.append(Reservaciones.user_id == args.get("user_id"))
+
+    if args.get("salon_id"):
+        params.append(Reservaciones.salon_id == args.get("salon_id"))
+
+    if args.get("start_date"):
+        params.append(Reservaciones.fecha >= args.get("start_date") + " 00:00")
+
+    if args.get("end_date"):
+        params.append(Reservaciones.fecha <= args.get("end_date") + " 23:59")
+
+    if args.get("confirmado"):
+        confirmado = args.get("confirmado") == "true"
+        params.append(Reservaciones.confirmado == confirmado)
+        
+
+    rsv = Reservaciones.query.where(*params).all()
+    return [rsv.to_json() for rsv in rsv], 200
+
+
+
+@events.get("/reservaciones/<reservacion_id>")
 def manager_get_reservacion_detail(reservacion_id):
-    pass
+    
+    try:
+        rsv = Reservaciones.query.where(Reservaciones.id == reservacion_id).one()
 
-@events.put("/reservaciones/<int:reservacion_id>")
+        return rsv.to_json(), 200
+
+    except:
+        return {"message": "Reservación no encontrada"}, 404
+
+
+
+@events.put("/reservaciones/<reservacion_id>")
 def manager_update_reservacion(reservacion_id):
-    pass
+    
+    payload = request.get_json()
 
-@events.put("/reservaciones/<int:reservacion_id>/cancelar")
+    try:
+        rsv = Reservaciones.query.where(Reservaciones.id == reservacion_id).one()
+    except:
+        return {"message": "Reservación no encontrada"}, 404
+
+    rsv.update(**payload)
+
+    commit()
+
+    return rsv.to_json(), 200
+
+
+    
+
+@events.put("/reservaciones/<reservacion_id>/cancelar")
 def manager_cancel_reservacion(reservacion_id):
-    pass
 
-@events.post("/paquetes-personalizados")
-def manager_create_paquete_personalizado():
-    pass
+    try:
+        rsv = Reservaciones.query.where(Reservaciones.id == reservacion_id).one()
 
-def manager_get_paquetes_personalizados():
-    pass
+        delete(rsv)
+
+        return {"message": "Reservación cancelada exitosamente"}, 200
+
+    except:
+        return {"message": "Reservación no encontrada"}, 404
+
+    

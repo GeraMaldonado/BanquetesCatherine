@@ -1,24 +1,19 @@
-from flask import Blueprint
+from flask import Blueprint, request, session
+from model.Reservaciones import Reservaciones
+from db import add
 
 
 reservaciones = Blueprint("reservaciones", __name__, url_prefix="/reservaciones")
 
 @reservaciones.post("/solicitudes-banquete")
 def submit_solicitud_banquete():
-    pass
+    
+    payload = request.get_json()
 
-@reservaciones.get("/mis-reservaciones")
-def get_mis_reservaciones():
-    pass
+    rsv = Reservaciones(user_id = session["user"]["id"], confirmado = False, **payload)
 
-@reservaciones.get("/reservaciones/<int:reservacion_id>")
-def get_mi_reservacion_detalle(reservacion_id):
-    pass
+    add(rsv)
 
-@reservaciones.put("/reservaciones/<int:reservacion_id>/invitados")
-def update_mis_invitados(reservacion_id):
-    pass
+    return rsv.to_json(), 200
 
-@reservaciones.get("/mis-paquetes-personalizados")
-def get_mis_paquetes_personalizados():
-    pass
+
