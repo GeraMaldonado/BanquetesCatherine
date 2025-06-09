@@ -60,3 +60,23 @@ class Reservaciones(db.Model):
         for a in a_agregar:
             nuevo_personal = Reservaciones_Personal(reservacion_id = self.id, colaborador_id = a)
             add(nuevo_personal)
+
+
+    def obtener_requerimientos_ingredientes(self):
+
+        instrucciones = self.platillo.instrucciones
+        ingredientes = [
+            {
+                **ing.ingrediente.to_json(),
+                "cantidad_requerida": ing.cantidad * self.invitados
+            }
+            for inst
+            in instrucciones
+            for ing
+            in inst.ingredientes
+        ]
+
+        return ingredientes
+
+
+
