@@ -1,7 +1,10 @@
 from flask import Blueprint, request
 from model.Platillos import Platillos, Instrucciones, InstruccionesIngredientes
 from model.Ingredientes import Ingredientes
-from db import add, find_by_id, delete
+from db import add, delete
+from model.Procurement import Procurement
+from datetime import datetime as dt
+
 
 
 
@@ -98,5 +101,37 @@ def manager_add_ingrediente():
 
 @menu.put("/ingredientes/<int:ingrediente_id>")
 def manager_update_ingrediente(ingrediente_id):
-    pass
+    
+    payload = request.get_json()
 
+    try:
+        ingrediente = Ingredientes.query.where(Ingredientes.id == ingrediente_id).one()
+
+        ingrediente.update(**payload)
+
+        return ingrediente.to_json(), 200
+
+    except:
+        return {"message": "Ingrediente no encontrado"}, 404
+
+
+
+
+@menu.post("/ingredientes/procurement")
+def manager_add_procurement():
+    
+    payload = request.get_json()
+
+    ingredientes = payload.get("ingredientes")
+    fecha_recepcion = payload.get("fecha_recepcion")
+
+    fecha_creacion = dt.now().strftime("%Y-%m-%d %H:%M")
+
+
+    for ingrediente in ingredientes:
+        
+        new_procurement = Procurement(fecha_recepcion = fecha_recepcion, fecha_creacion = fecha_creacion, **ingrediente)
+        add(new_procurement)
+
+
+    return {"message": "Procurement added successfully"}, 200

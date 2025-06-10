@@ -12,10 +12,6 @@ def login():
 
         result = Users.login(**request.get_json())
 
-        if result.role == "PERSONAL":
-
-            raise Exception("Usuario no autorizado")
-
         response = result.to_json()
 
         session["user"] = response

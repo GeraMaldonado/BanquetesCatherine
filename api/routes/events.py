@@ -1,6 +1,9 @@
 from flask import Blueprint, request
 from model.Reservaciones import Reservaciones
-from db import commit, delete
+from model.Pagos import Pagos
+from db import commit, delete, add
+from datetime import datetime as dt
+
 
 
 
@@ -83,4 +86,39 @@ def manager_cancel_reservacion(reservacion_id):
     except:
         return {"message": "Reservación no encontrada"}, 404
 
+
+@events.post("/reservaciones/<reservacion_id>/update-staff")
+def manager_confirm_reservacion(reservacion_id):
+
+    payload = request.get_json()
+    try:
+        evento = Reservaciones.query.where(Reservaciones.id == reservacion_id).one()
+
+        evento.actualizar_plantilla(payload)
+
+        return evento.to_json(), 200
+
     
+    except Exception as e:
+
+        return {"message": "Reservación no encontrada"}, 404
+
+
+
+@events.post("/reservaciones/<reservacion_id>/registrar-pago")
+def event_registrar_pago(reservacion_id):
+
+    payload = request.get_json()
+    try:
+        evento = Reservaciones.query.where(Reservaciones.id == reservacion_id).one()
+
+        pago = Pagos(reservacion_id = evento.id, fecha = dt.now().strftime("%Y-%m-%d %H:%M"), **payload)
+
+        add(pago)
+
+        return evento.to_json(), 200
+
+    
+    except Exception as e:
+
+        return {"message": str(e)}, 404
