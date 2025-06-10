@@ -13,7 +13,7 @@ import { Login } from './pages/login/Login.jsx';
 import { SessionProvider } from './providers/session.provider.jsx';
 import { AppLayout } from './components/organisms/layout/layout.jsx';
 
-import { RoleRouter } from './pages/principalView/principalView.jsx';
+import { RoleRouter } from './pages/principalView/PrincipalView.jsx';
 
 
 import { EventoDetalle } from './pages/general/Evento.jsx';
