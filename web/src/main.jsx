@@ -16,11 +16,11 @@ import { AppLayout } from './components/organisms/layout/layout.jsx';
 import { RoleRouter } from './pages/principalView/principalView.jsx';
 
 
-import { EventoDetalle } from './pages/general/Evento.jsx';
-import { ClienteDetalle } from './pages/general/Cliente.jsx';
-import { ListEventos } from './pages/general/ListEventos.jsx';
-import { ListClientes } from './pages/general/ListClientes.jsx';
-import { ListStaff } from './pages/general/ListStaff.jsx';
+import { EventoDetalle } from './pages/app/Evento.jsx';
+import { ClienteDetalle } from './pages/app/Cliente.jsx';
+import { ListEventos } from './pages/app/ListEventos.jsx';
+import { ListClientes } from './pages/app/ListClientes.jsx';
+import { ListStaff } from './pages/app/ListStaff.jsx';
 
 
 const App = () => (
@@ -33,13 +33,11 @@ const App = () => (
 
           <Route path="app" element={<AppLayout />}>
             <Route index element={<RoleRouter />} />
-            <Route path='colaborador' >
-              <Route index element={<ListEventos />} />
-              <Route path='evento/:eventId' element={<EventoDetalle scope={"COLABORADOR"} />} />
-              <Route path='customers' element={<ListClientes />} />
-              <Route path='customers/:clienteId' element={<ClienteDetalle />} />
-              <Route path='team' element={<ListStaff />} />
-            </Route>
+            <Route path='eventos' element={<ListEventos />} />
+            <Route path='evento/:eventId' element={<EventoDetalle scope={"COLABORADOR"} />} />
+            <Route path='customers' element={<ListClientes />} />
+            <Route path='customers/:clienteId' element={<ClienteDetalle />} />
+            <Route path='team' element={<ListStaff />} />
           </Route>
 
         </Routes>

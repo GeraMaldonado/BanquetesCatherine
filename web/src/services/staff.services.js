@@ -1,4 +1,3 @@
-import { apiService } from "./api.service"; // Descomentar cuando se integre con la API real
 import { fetchEvents } from "./eventos.service.js";
 
 export const fetchStaffMembers = (role) => {

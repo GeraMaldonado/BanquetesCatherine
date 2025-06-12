@@ -19,7 +19,7 @@ export const Login = () => {
         try {
             
             
-            const credentials = { usuario: email, password: password };
+            const credentials = { user: email, password: password };
             const userData = await login(credentials);
 
             console.log("Login exitoso, usuario:", userData);

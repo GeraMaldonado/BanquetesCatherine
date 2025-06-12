@@ -19,6 +19,9 @@ def manager_get_all_reservaciones():
 
     params = []
 
+    if args.get("id"): 
+        params.append(Reservaciones.id == args.get("id"))
+
     if args.get("user_id"): 
         params.append(Reservaciones.user_id == args.get("user_id"))
 
@@ -33,7 +36,8 @@ def manager_get_all_reservaciones():
 
     if args.get("confirmado"):
         confirmado = args.get("confirmado") == "true"
-        params.append(Reservaciones.confirmado == confirmado)
+        if confirmado:
+            params.append(Reservaciones.confirmado == confirmado)
         
 
     rsv = Reservaciones.query.where(*params).all()

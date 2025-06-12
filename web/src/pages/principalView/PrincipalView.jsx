@@ -6,7 +6,7 @@ export const RoleRouter = ({  }) => {
 
     const { currentUser } = useSession();
 
-    if (currentUser.role == "COLABORADOR") {
-        return <Navigate to="/app/colaborador" />
+    if (currentUser.role == "ADMIN") {
+        return <Navigate to="/app/eventos" />
     }
 }
