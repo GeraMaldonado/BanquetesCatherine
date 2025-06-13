@@ -45,7 +45,7 @@ class Users(db.Model):
 
         except Exception as e:
             print(e)
-            raise Exception("Usuario no encontrado")
+            raise Exception(e)
 
         
 

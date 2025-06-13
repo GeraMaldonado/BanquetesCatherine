@@ -16,4 +16,10 @@ class Salones(db.Model):
 
     eventos = relationship("Reservaciones", back_populates="salon")
     gerente = relationship("Users", back_populates="salon_gerencia")
+
+    def to_json(self):
+        return {
+            **super().to_json(),
+            "gerente": self.gerente.to_json()
+        }
     

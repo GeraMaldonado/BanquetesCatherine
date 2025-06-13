@@ -9,7 +9,7 @@ const DAY_NAMES_ABBR = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
  * @returns {Date|null} Un objeto Date si el parseo es exitoso, de lo contrario null.
  */
 function parseDateTimeString(dateTimeStr) {
-    const dateTimeRegex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2})$/;
+    const dateTimeRegex = /^(\d{4})-(\d{2})-(\d{2})[\s,T](\d{2}):(\d{2})$/;
     const match = dateTimeStr.match(dateTimeRegex);
 
     if (!match) return null;

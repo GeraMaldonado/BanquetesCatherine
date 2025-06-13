@@ -32,11 +32,11 @@ export const AppLayout = () => {
                     Catherine Co. App
                 </RouterLink>
                 <div className="ms-auto">
-                    {currentUser && <span className="navbar-text me-3">Hola, {currentUser.nombre} ({currentUser.role})</span>}
+                    {currentUser && <span className="navbar-text me-3">Hola, {currentUser.name} ({currentUser.role})</span>}
                     <Button onClick={logout} secondary small>Cerrar Sesión</Button>
                 </div>
             </nav>
-            <main className="container mt-4 p-4 ps-5" style={{ display:'grid', gridTemplateColumns: 'auto 1fr' }}>
+            <main className="container mt-4 p-4 ps-5">
                 <NavBar links={[
                     {
                         icon: "bi-calendar-event-fill",
