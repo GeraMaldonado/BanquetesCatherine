@@ -40,19 +40,19 @@ export const AppLayout = () => {
                 <NavBar links={[
                     {
                         icon: "bi-calendar-event-fill",
-                        to: "/app/colaborador"
+                        to: "/app/eventos"
                     },
                     {
                         icon: "bi-people-fill",
-                        to: "/app/colaborador/team"
+                        to: "/app/staff"
                     },
                     {
                         icon: "bi-receipt",
-                        to: "/app/colaborador/procurement"
+                        to: "/app/procurement"
                     },
                     {
                         icon: "bi-star-fill",
-                        to: "/app/colaborador/customers"
+                        to: "/app/customers"
                     },
                 ]} />
                 <Outlet />

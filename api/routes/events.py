@@ -96,6 +96,7 @@ def manager_confirm_reservacion(reservacion_id):
 
     payload = request.get_json()
     try:
+
         evento = Reservaciones.query.where(Reservaciones.id == reservacion_id).one()
 
         evento.actualizar_plantilla(payload)
@@ -105,6 +106,7 @@ def manager_confirm_reservacion(reservacion_id):
     
     except Exception as e:
 
+        print(e)
         return {"message": "Reservación no encontrada"}, 404
 
 
@@ -124,5 +126,4 @@ def event_registrar_pago(reservacion_id):
 
     
     except Exception as e:
-
         return {"message": str(e)}, 404
