@@ -34,10 +34,10 @@ const App = () => (
           <Route path="app" element={<AppLayout />}>
             <Route index element={<RoleRouter />} />
             <Route path='eventos' element={<ListEventos />} />
-            <Route path='evento/:eventId' element={<EventoDetalle scope={"COLABORADOR"} />} />
+            <Route path='evento/:eventId' element={<EventoDetalle />} />
             <Route path='customers' element={<ListClientes />} />
             <Route path='customers/:clienteId' element={<ClienteDetalle />} />
-            <Route path='team' element={<ListStaff />} />
+            <Route path='staff' element={<ListStaff />} />
           </Route>
 
         </Routes>

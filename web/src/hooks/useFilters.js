@@ -12,7 +12,6 @@ export const useFilters = () => {
         }));
     };
 
-    console.log("Current Filters:", filters); // Better logging for debugging
 
     return { filters, handleFilterChange };
 };

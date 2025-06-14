@@ -1,12 +1,15 @@
-import { fetchClientes } from "../../services/clientes.service";
+import { useClientesData } from "../../hooks/useClientesData";
 import { Button } from "../../components/atoms/button/Button";
-import { formatDate } from "../../utils/date.utils";
 
 
 
-export const ListClientes = ({ scope }) => {
+export const ListClientes = () => {
 
-    const clientes = fetchClientes();
+    const { loading, clientes } = useClientesData();
+
+    if (loading) { 
+        return <div>Cargando...</div>
+     }
 
 
 
@@ -18,21 +21,21 @@ export const ListClientes = ({ scope }) => {
                     <thead>
                         <tr className="fw-bold">
                             <td>Nombre</td>
-                            <td>Teléfono</td>
-                            <td>RFC</td>
-                            <td>Dirección</td>
+                            <td>Contacto</td>
+                            <td>Eventos</td>
+                            <td className="text-end">Importe promedio</td>
                             <td></td>
                         </tr>
                     </thead>
                     <tbody>
                         {
                             clientes.map(cliente => (
-                                <tr key={cliente._id}>
-                                    <td>{cliente.nombre} {cliente.apellido}</td>
-                                    <td>{cliente.telefono}</td>
-                                    <td>{cliente.rfc}</td>
-                                    <td>{cliente.direccion.calle}, {cliente.direccion.ciudad}, {cliente.direccion.cp}</td>
-                                    <td><Button className="bi bi-search" navigateTo={cliente._id}></Button></td>
+                                <tr key={cliente.id}>
+                                    <td>{cliente.name}</td>
+                                    <td>{cliente.email}</td>
+                                    <td>{cliente.eventos.length} Eventos rsv</td>
+                                    <td className="text-end">$ {cliente.eventos.length > 0 ? (cliente.eventos.reduce((accum, value) => accum + value.importe, 0) / cliente.eventos.length).toLocaleString() : "-"}</td>
+                                    <td><Button>Ver</Button></td>
                                 </tr>
                             ))
                         }

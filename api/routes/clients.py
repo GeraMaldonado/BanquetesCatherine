@@ -53,7 +53,7 @@ def manager_list_clients():
     
     clients = Users.query.where(Users.role == "CLIENTE").all()
 
-    return [client.to_json() for client in clients], 200
+    return [{**client.to_json(), "eventos": [e.to_json() for e in client.reservaciones]} for client in clients], 200
 
 
 

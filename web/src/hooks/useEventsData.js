@@ -89,5 +89,7 @@ export const useEventData = (id) => {
 
 
     
-    return { event, loading, handleConfirmEvent, handleUpdateInvitados }
+    return { event, loading, handleConfirmEvent, handleUpdateInvitados, refresh: getEvents }
 }
+
+
