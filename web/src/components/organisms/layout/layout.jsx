@@ -1,8 +1,9 @@
 import { Outlet, Navigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import { useSession } from '../../../providers/session.provider';
-import { Button } from '../../atoms/button/Button';
+import { Button } from '../../atoms/button/button';
 import { Image } from '../../atoms/image/Image';
 import { NavBar } from './navbar';
+
 
 const LoadingScreen = () => (
     <div className="vw-100 vh-100 d-flex justify-content-center align-items-center">
@@ -24,6 +25,35 @@ export const AppLayout = () => {
         return <Navigate to="/login" state={{ from: location }} replace />;
     }
 
+
+    const links = {
+        "ADMIN": [
+            {
+                icon: "bi-calendar-event-fill",
+                to: "/app/eventos"
+            },
+            {
+                icon: "bi-people-fill",
+                to: "/app/staff"
+            },
+            {
+                icon: "bi-star-fill",
+                to: "/app/customers"
+            },
+            {
+                icon: "bi-bar-chart-fill",
+                to: "/app/procurement"
+            },
+            {
+                icon: "bi-sliders",
+                to: "/app/configuracion"
+            },
+        ],
+        "CLIENTE": []
+    }
+
+
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3 px-4">
@@ -37,24 +67,7 @@ export const AppLayout = () => {
                 </div>
             </nav>
             <main className="container mt-4 p-4 ps-5">
-                <NavBar links={[
-                    {
-                        icon: "bi-calendar-event-fill",
-                        to: "/app/eventos"
-                    },
-                    {
-                        icon: "bi-people-fill",
-                        to: "/app/staff"
-                    },
-                    {
-                        icon: "bi-receipt",
-                        to: "/app/procurement"
-                    },
-                    {
-                        icon: "bi-star-fill",
-                        to: "/app/customers"
-                    },
-                ]} />
+                <NavBar links={links[currentUser.role]} />
                 <Outlet />
             </main>
         </div>

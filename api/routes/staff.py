@@ -46,7 +46,7 @@ def delete_personal_by_id(personal_id):
         delete(personal_to_delete)
         return {"message": f"Personal with ID {personal_id} deleted successfully"}, 200
     except Exception as e:
-        print(e)
+
         return {"error": f"Error deleting personal: {str(e)}"}, 500
 
 

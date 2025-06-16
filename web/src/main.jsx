@@ -13,7 +13,8 @@ import { Login } from './pages/login/Login.jsx';
 import { SessionProvider } from './providers/session.provider.jsx';
 import { AppLayout } from './components/organisms/layout/layout.jsx';
 
-import { RoleRouter } from './pages/principalView/principalView.jsx';
+import { RoleRouter } from "./pages/principalView/PrincipalView.jsx";
+import { Error404Handler } from './components/atoms/router/error404.jsx'
 
 
 import { EventoDetalle } from './pages/app/Evento.jsx';
@@ -21,6 +22,8 @@ import { ClienteDetalle } from './pages/app/Cliente.jsx';
 import { ListEventos } from './pages/app/ListEventos.jsx';
 import { ListClientes } from './pages/app/ListClientes.jsx';
 import { ListStaff } from './pages/app/ListStaff.jsx';
+import { Procurement } from './pages/app/Procurement.jsx';
+import { Configuracion } from './pages/app/Configuracion.jsx';
 
 
 const App = () => (
@@ -28,23 +31,26 @@ const App = () => (
     <SessionProvider>
       <BrowserRouter>
         <Routes>
-          <Route index element={<Landing />} />
-          <Route path="login" element={<Login />} />
+          <Route path="/" element={<Error404Handler />}>
+            <Route index element={<Landing />} />
+            <Route path="login" element={<Login />} />
 
-          <Route path="app" element={<AppLayout />}>
-            <Route index element={<RoleRouter />} />
-            <Route path='eventos' element={<ListEventos />} />
-            <Route path='evento/:eventId' element={<EventoDetalle />} />
-            <Route path='customers' element={<ListClientes />} />
-            <Route path='customers/:clienteId' element={<ClienteDetalle />} />
-            <Route path='staff' element={<ListStaff />} />
+            <Route path="app" element={<AppLayout />}>
+              <Route index element={<RoleRouter />} />
+              <Route path='eventos' element={<ListEventos />} />
+              <Route path='evento/:eventId' element={<EventoDetalle />} />
+              <Route path='customers' element={<ListClientes />} />
+              <Route path='customers/:clienteId' element={<ClienteDetalle />} />
+              <Route path='staff' element={<ListStaff />} />
+              <Route path='procurement' element={<Procurement />} />
+              <Route path='configuracion' element={<Configuracion />} />
+            </Route>
+
           </Route>
-
         </Routes>
       </BrowserRouter>
     </SessionProvider>
   </React.StrictMode>
 );
-
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);

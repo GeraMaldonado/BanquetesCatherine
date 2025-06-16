@@ -23,6 +23,12 @@ class Users(db.Model):
 
         del base_json["password"]
 
+        if self.role == "GERENTE":
+            
+            salon = self.salon_gerencia[0]
+            
+            base_json["salon_id"] = salon.id
+
         return base_json
 
 
@@ -44,7 +50,7 @@ class Users(db.Model):
 
 
         except Exception as e:
-            print(e)
+
             raise Exception(e)
 
         

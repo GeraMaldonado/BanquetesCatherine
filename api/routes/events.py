@@ -106,7 +106,7 @@ def manager_confirm_reservacion(reservacion_id):
     
     except Exception as e:
 
-        print(e)
+
         return {"message": "Reservación no encontrada"}, 404
 
 

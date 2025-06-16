@@ -9,4 +9,14 @@ export const RoleRouter = ({  }) => {
     if (currentUser.role == "ADMIN") {
         return <Navigate to="/app/eventos" />
     }
+
+    if (currentUser.role == "CLIENTE") {
+        return <Navigate to={"/app/customers/" + currentUser.id} />
+    
+    }
+
+    if (currentUser.role == "GERENTE"){
+        return <Navigate to="/app/eventos" />
+    
+    }
 }

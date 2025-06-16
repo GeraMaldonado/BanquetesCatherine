@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, redirect, request
 from flask_cors import CORS
 from config import DATABASE_URL
 from db import db
@@ -16,7 +16,7 @@ from routes.superuser import superuser_routes
 
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="../web/dist", static_url_path="/")
 
 CORS(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL
@@ -47,6 +47,15 @@ app.register_blueprint(reporting)
 app.register_blueprint(reservaciones)
 app.register_blueprint(hr)
 app.register_blueprint(superuser_routes)
+
+@app.route("/")
+def index():
+    return app.send_static_file("index.html")
+
+@app.errorhandler(404)
+def not_found(error):
+    return redirect("/?redirect=" + request.path)
+
 
 
 if __name__ == "__main__":

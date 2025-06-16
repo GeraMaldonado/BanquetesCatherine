@@ -9,16 +9,14 @@ from model.Salones import Salones
 superuser_routes = Blueprint("superuser_routes", __name__, url_prefix="/superuser")
 
 
-@superuser_routes.get("/gerentes")
-def admin_list_gerentes():
-    pass
+@superuser_routes.get("/gerentes/<id>")
+def admin_list_gerentes(id):
+    gerentes = Users.query.where(Users.role == "GERENTE", Users.id == id).all()
+
+    return [{**g.to_json(), "salon": [e.to_json() for e in g.salon_gerencia]} for g in gerentes], 200
 
 @superuser_routes.post("/gerentes")
 def admin_add_gerente():
-    pass
-
-@superuser_routes.put("/gerentes/<int:gerente_id>/estatus")
-def admin_update_gerente_status(gerente_id):
     pass
 
 
@@ -42,7 +40,7 @@ def create_user():
 def delete_user(id):
     
     user = find_by_id(Users, id)
-    print(user)
+
     delete(user)
 
     return {"message": "User deleted successfully"}, 200

@@ -9,8 +9,8 @@ reservaciones = Blueprint("reservaciones", __name__, url_prefix="/reservaciones"
 def submit_solicitud_banquete():
     
     payload = request.get_json()
-
-    rsv = Reservaciones(user_id = session["user"]["id"], confirmado = False, **payload)
+    print(session)
+    rsv = Reservaciones(confirmado = False, **payload)
 
     add(rsv)
 

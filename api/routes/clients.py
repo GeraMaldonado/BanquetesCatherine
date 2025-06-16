@@ -64,7 +64,7 @@ def manager_get_client_details(client_id):
     
     try:
         client = Users.query.where(Users.id == client_id, Users.role == "CLIENTE").one()
-        return client.to_json(), 200
+        return {**client.to_json(), "eventos": [e.to_json() for e in client.reservaciones]}, 200
     
     except Exception as e:
         return {"message": "Client not found"}, 404

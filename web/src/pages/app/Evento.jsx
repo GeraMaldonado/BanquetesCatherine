@@ -4,6 +4,7 @@ import { formatDate } from '../../utils/date.utils'
 import { Button } from '../../components/atoms/button/button'
 import { useState, useEffect } from 'react';
 import { fetchAvailableStaffByDate, updatePlantilla } from '../../services/staff.services';
+import { useSession } from "../../providers/session.provider"
 
 // Componente de Spinner para la carga
 const LoadingSpinner = () => (
@@ -22,6 +23,7 @@ export const EventoDetalle = () => {
     const { event, loading, handleConfirmEvent, handleUpdateInvitados, refresh } = useEventData(eventId);
     const [staffData, setStaffData] = useState([]);
     const [selectedStaff, setSelectedStaff] = useState([]);
+    const { currentUser } = useSession();
 
     const fetchStaff = async () => {
         if (event?.fecha) {
@@ -62,7 +64,7 @@ export const EventoDetalle = () => {
 
     async function removeStaff(id) {
 
-        const newPlantilla = event.plantilla.filter(personal => personal.id !== id).map(p=>p.id);
+        const newPlantilla = event.plantilla.filter(personal => personal.id !== id).map(p => p.id);
         await updatePlantilla(event.id, newPlantilla);
         await fetchStaff();
         await refresh();
@@ -73,12 +75,12 @@ export const EventoDetalle = () => {
             <div className="container mt-4 mb-5">
                 <div className="row g-4">
                     <div className="col-6 d-flex align-items-center">
-                        <Button className="bi bi-arrow-90deg-left" navigateTo="/app/eventos"> Regresar</Button>
+                        <Button className="bi bi-arrow-90deg-left" navigateTo="/app"> Regresar</Button>
                     </div>
                     <div className="col-6 d-flex flex-column justify-content-center align-items-end">
                         Acciones rapidas
                         <div className="d-flex mt-3 gx-2">
-                            <Button onClick={handleConfirmEvent} className={"mx-2 " + (event.confirmado ? "btn-danger" : "btn-warning")} >{event.confirmado ? "Cancelar confirmacion" : "Confirmar evento"}</Button>
+                            {currentUser.role == "ADMIN" && <Button onClick={handleConfirmEvent} className={"mx-2 " + (event.confirmado ? "btn-danger" : "btn-warning")} >{event.confirmado ? "Cancelar confirmacion" : "Confirmar evento"}</Button>}
                             <Button onClick={handleUpdateInvitados} className="ms-2" primary>Actualizar invitados</Button>
                         </div>
                     </div>
@@ -155,27 +157,32 @@ export const EventoDetalle = () => {
                                 <hr className="mt-4" />
 
                                 {/* --- Sección de Plantilla --- */}
-                                <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
-                                    <h5 className="card-title mb-0">Plantilla Asignada</h5>
-                                    <Button primary className="btn-sm bi bi-plus-circle me-1" data-bs-toggle="modal" data-bs-target="#agregarPersonalModal">
-                                        <i className=""></i> Agregar Personal
-                                    </Button>
-                                </div>
-                                <dl className="row">
-                                    {
-                                        event.plantilla.length > 0
-                                            ? event.plantilla.map(personal => (
-                                                <dd key={personal.id} className='col-sm-12 d-flex justify-content-between align-items-center mb-2'>
-                                                    <span>{personal.nombre}</span>
-                                                    <button onClick={()=>removeStaff(personal.id)} className='btn btn-sm btn-outline-danger p-0 px-2'>
-                                                        <i className="bi bi-trash"></i>
-                                                    </button>
-                                                </dd>
-                                            ))
-                                            :
-                                            <div className="col-12 text-secondary fst-italic">Sin plantilla asignada.</div>
-                                    }
-                                </dl>
+                                {
+                                    currentUser.role == "ADMIN" &&   
+                                    <>
+                                        <div className="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                                            <h5 className="card-title mb-0">Plantilla Asignada</h5>
+                                            <Button primary className="btn-sm bi bi-plus-circle me-1" data-bs-toggle="modal" data-bs-target="#agregarPersonalModal">
+                                                <i className=""></i> Agregar Personal
+                                            </Button>
+                                        </div>
+                                        <dl className="row">
+                                            {
+                                                event.plantilla.length > 0
+                                                    ? event.plantilla.map(personal => (
+                                                        <dd key={personal.id} className='col-sm-12 d-flex justify-content-between align-items-center mb-2'>
+                                                            <span>{personal.nombre}</span>
+                                                            <button onClick={() => removeStaff(personal.id)} className='btn btn-sm btn-outline-danger p-0 px-2'>
+                                                                <i className="bi bi-trash"></i>
+                                                            </button>
+                                                        </dd>
+                                                    ))
+                                                    :
+                                                    <div className="col-12 text-secondary fst-italic">Sin plantilla asignada.</div>
+                                            }
+                                        </dl>
+                                    </>
+                                }
                             </div>
                         </div>
                     </div>

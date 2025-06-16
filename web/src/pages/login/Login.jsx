@@ -1,15 +1,17 @@
-import { useState } from "react";
-import { Button } from "../../components/atoms/button/Button";
+import { useEffect, useState } from "react";
+import { Button } from "../../components/atoms/button/button";
 import { Image } from "../../components/atoms/image/Image";
 import { Link, useNavigate } from "react-router-dom"; 
-import { login } from "../../services/auth.service"; 
+import { useSession } from "../../providers/session.provider";
 
 export const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(''); 
     const [loading, setLoading] = useState(false); 
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const { login, isAuthenticated } = useSession();
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -20,10 +22,8 @@ export const Login = () => {
             
             
             const credentials = { user: email, password: password };
-            const userData = await login(credentials);
+            await login(credentials);
 
-            console.log("Login exitoso, usuario:", userData);
-            
             navigate('/app'); 
 
         } catch (err) {
@@ -34,6 +34,12 @@ export const Login = () => {
             setLoading(false);
         }
     };
+
+    useEffect(()=>{
+        if(isAuthenticated){
+            navigate('/app');
+        }
+    },[isAuthenticated])
 
     return (
         <div className="vw-100 vh-100 d-flex justify-content-center align-items-center bg-secundario">
