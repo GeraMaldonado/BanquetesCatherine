@@ -1,14 +1,27 @@
-import { Button } from "../../components/atoms/button/Button";
+import { Button } from "../../components/atoms/button/button";
 import { formatDate } from "../../utils/date.utils";
 import { useEventsData } from "../../hooks/useEventsData";
 import { useFilters } from "../../hooks/useFilters";
-
+import { useEffect } from "react";
+import { useSession } from "../../providers/session.provider"
 
 
 export const ListEventos = () => {
 
+    const { currentUser } = useSession();
     const { filters, handleFilterChange } = useFilters();
     const { events } = useEventsData(filters);
+
+
+    useEffect(() => {
+        if (currentUser.role != "GERENTE") return;
+        handleFilterChange({
+            target: {
+                name: "salon_id",
+                value: currentUser.salon_id,
+            }
+        })
+    }, [currentUser])
 
 
 

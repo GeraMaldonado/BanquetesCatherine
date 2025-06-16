@@ -1,5 +1,5 @@
 import { useClientesData } from "../../hooks/useClientesData";
-import { Button } from "../../components/atoms/button/Button";
+import { Button } from "../../components/atoms/button/button";
 
 
 
@@ -35,7 +35,7 @@ export const ListClientes = () => {
                                     <td>{cliente.email}</td>
                                     <td>{cliente.eventos.length} Eventos rsv</td>
                                     <td className="text-end">$ {cliente.eventos.length > 0 ? (cliente.eventos.reduce((accum, value) => accum + value.importe, 0) / cliente.eventos.length).toLocaleString() : "-"}</td>
-                                    <td><Button>Ver</Button></td>
+                                    <td><Button className="bi bi-search" primary navigateTo={"/app/customers/" + cliente.id}> Ver</Button></td>
                                 </tr>
                             ))
                         }

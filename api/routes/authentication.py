@@ -19,7 +19,7 @@ def login():
         return response, 200
 
     except Exception as e:
-
+        
         return {"error": str(e)}, 400
 
 
