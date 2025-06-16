@@ -14,6 +14,7 @@ export const ListEventos = () => {
 
 
     useEffect(() => {
+        if (currentUser.role != "GERENTE") return;
         handleFilterChange({
             target: {
                 name: "salon_id",
