@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { fetchClienteById, modificarCliente } from '../../services/clientes.service';
 import { eventRequest } from '../../services/eventos.service';
 import { formatDate } from '../../utils/date.utils';
-import { Button } from '../../components/atoms/button/button';
+import { Button } from '../../components/atoms/button/Button';
 import { useSession } from '../../providers/session.provider'
 import { fetchMenus, fetchSalones } from '../../services/public.service';
 

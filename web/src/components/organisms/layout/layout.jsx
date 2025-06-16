@@ -1,6 +1,6 @@
 import { Outlet, Navigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import { useSession } from '../../../providers/session.provider';
-import { Button } from '../../atoms/button/button';
+import { Button } from '../../atoms/button/Button';
 import { Image } from '../../atoms/image/Image';
 import { NavBar } from './navbar';
 

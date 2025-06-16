@@ -1,4 +1,4 @@
-import { Button } from "../../components/atoms/button/button";
+import { Button } from "../../components/atoms/button/Button";
 import { formatDate } from "../../utils/date.utils";
 import { useEventsData } from "../../hooks/useEventsData";
 import { useFilters } from "../../hooks/useFilters";

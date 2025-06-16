@@ -1,5 +1,5 @@
-const BASE_URL = "https://4t16gwt3-5000.usw3.devtunnels.ms";
-// const BASE_URL = "http://127.0.0.1:5000";
+//const BASE_URL = "https://4t16gwt3-5000.usw3.devtunnels.ms";
+const BASE_URL = "http://127.0.0.1:5000";
 
 
 export const postData = async (url, data) => {

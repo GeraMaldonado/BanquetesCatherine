@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEventData } from '../../hooks/useEventsData';
 import { formatDate } from '../../utils/date.utils'
-import { Button } from '../../components/atoms/button/button'
+import { Button } from '../../components/atoms/button/Button'
 import { useState, useEffect } from 'react';
 import { fetchAvailableStaffByDate, updatePlantilla } from '../../services/staff.services';
 import { useSession } from "../../providers/session.provider"

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button } from "../../components/atoms/button/button";
+import { Button } from "../../components/atoms/button/Button";
 import { Image } from "../../components/atoms/image/Image";
 import { Link, useNavigate } from "react-router-dom"; 
 import { useSession } from "../../providers/session.provider";

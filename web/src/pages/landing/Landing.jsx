@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Button } from "../../components/atoms/button/button"
+import { Button } from "../../components/atoms/button/Button"
 import { Image } from "../../components/atoms/image/Image"
 
 import { useLandingData } from "./useLandingData";

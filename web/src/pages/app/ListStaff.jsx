@@ -1,5 +1,5 @@
 import { useStaffData } from '../../hooks/useStaffData';
-import { Button } from '../../components/atoms/button/button'
+import { Button } from '../../components/atoms/button/Button'
 
 export const ListStaff = ({ }) => {
     
